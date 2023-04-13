@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "manim-tensorflow"
+version = "0.1.0"
+description = "TensorFlow animations in Manim"
+authors = ["Risang Baskoro <risangbaskoro@gmail.com>"]
+readme = "README.md"
+packages = [{include = "manim_tensorflow", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+
+[tool.poetry.dependencies.manim]
+version = "^0.17.3"
+python = ">=3.11, <3.12"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
