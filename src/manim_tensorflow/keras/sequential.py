@@ -37,12 +37,12 @@ class Sequential(VGroup):
             layer: Layer,
     ) -> VGroup:
         edges = VGroup()
-        for prev_node in prev_layer.get_nodes():
-            for node in layer.get_nodes():
-                if not isinstance(prev_node, Dot) and not isinstance(node, Dot):
+        for prev_neuron in prev_layer.get_neurons():
+            for neuron in layer.get_neurons():
+                if not isinstance(prev_neuron, Dot) and not isinstance(neuron, Dot):
                     edge = Line(
-                        prev_node.get_edge_center(RIGHT),  # TODO: Make get_edge_center dynamic
-                        node.get_edge_center(LEFT),  # TODO: Make get_edge_center dynamic
+                        prev_neuron.get_edge_center(RIGHT),  # TODO: Make get_edge_center dynamic
+                        neuron.get_edge_center(LEFT),  # TODO: Make get_edge_center dynamic
                         stroke_width=self.sequence_config["edge_stroke_width"],
                     )
                     edges.add(edge)

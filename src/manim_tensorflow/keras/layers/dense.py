@@ -1,11 +1,10 @@
+from manim_tensorflow.module import Module
 from manim_tensorflow.engine.base_layer import Layer
-from manim.mobject.geometry.arc import Circle, Dot
-from manim.constants import DOWN
 
 from manim import *
 
 
-class Dense(Layer):
+class Dense(Layer, Module):
     def __init__(
             self,
             units: int,
@@ -16,9 +15,10 @@ class Dense(Layer):
         Layer.__init__(self, **kwargs)
 
         self.units_config = {
-            "radius": 0.2,
+            "neuron_radius": 0.15,
             "color": self.get_color(),
-            "nodes_direction": DOWN,
+            "neurons_direction": DOWN,
+            "neurons_buff": MED_SMALL_BUFF,
         }
 
         if units_config is not None:
@@ -27,16 +27,16 @@ class Dense(Layer):
         self.units = units
         self.max_units = max_units
 
-        self.nodes = self._create_nodes(self.units, self.units_config, self.max_units)
-        self.add(*self.nodes)
+        self.neurons = self._create_neurons(self.units, self.units_config, self.max_units)
+        self.add(*self.neurons)
 
-    def _create_nodes(
+    def _create_neurons(
             self,
             units: int,
             units_config: dict,
             max_units: int,
     ) -> Layer:
-        nodes = Layer()
+        neurons = Layer()
         num_units = units
         dots = []
 
@@ -46,14 +46,17 @@ class Dense(Layer):
 
         for _ in range(num_units):
             if _ == num_units // 2 and units > max_units:
-                nodes.add(*dots)
+                neurons.add(*dots)
             else:
-                node = Circle(
-                    radius=units_config["radius"],
+                neuron = Circle(
+                    radius=units_config["neuron_radius"],
                     color=units_config["color"],
                 )
-                nodes.add(node)
+                neurons.add(neuron)
 
-        nodes.arrange(units_config["nodes_direction"], buff=0.1)
+        neurons.arrange(
+            units_config["neurons_direction"],
+            buff=units_config["neurons_buff"],
+        )
 
-        return nodes
+        return neurons
