@@ -6,9 +6,11 @@ from manim import *
 class SequentialScene(Scene):
     def construct(self):
         model = Sequential([
-            Dense(units=64),
-            Dense(units=32),
-            Dense(units=1),
+            Dense(64, max_units=16),
+            Dense(32, max_units=16),
+            Dense(4),
+            Dense(1),
         ])
 
         self.play(Write(model))
+        self.wait()

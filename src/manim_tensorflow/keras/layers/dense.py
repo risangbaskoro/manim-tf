@@ -8,55 +8,57 @@ class Dense(Layer, Module):
     def __init__(
             self,
             units: int,
-            units_config: dict | None = None,
+            neurons_config: dict | None = None,
             max_units: int = 6,
+            input_shape: tuple[int, int] | None = None,
             **kwargs,
     ):
         Layer.__init__(self, **kwargs)
 
-        self.units_config = {
+        self.neurons_config = {
             "neuron_radius": 0.15,
             "color": self.get_color(),
             "neurons_direction": DOWN,
             "neurons_buff": MED_SMALL_BUFF,
         }
 
-        if units_config is not None:
-            self.units_config = merge_dicts_recursively(self.units_config, units_config)
+        if neurons_config is not None:
+            self.neurons_config = merge_dicts_recursively(self.neurons_config, neurons_config)
 
         self.units = units
         self.max_units = max_units
 
-        self.neurons = self._create_neurons(self.units, self.units_config, self.max_units)
+        self.neurons = self._create_neurons(self.units, self.neurons_config, self.max_units)
         self.add(*self.neurons)
 
     def _create_neurons(
             self,
             units: int,
-            units_config: dict,
+            neurons_config: dict,
             max_units: int,
     ) -> Layer:
         neurons = Layer()
-        num_units = units
+        num_neurons = units
         dots = []
 
         if units > max_units:
-            num_units = self.max_units + 1
-            dots = [Dot() for _ in range(3)]
+            num_neurons = self.max_units + 1
+            dots = VGroup(*[Dot(radius=.05) for _ in range(3)])
+            dots.arrange(neurons_config["neurons_direction"], buff=neurons_config["neurons_buff"]/3)
 
-        for _ in range(num_units):
-            if _ == num_units // 2 and units > max_units:
+        for _ in range(num_neurons):
+            if _ == num_neurons // 2 and units > max_units:
                 neurons.add(*dots)
             else:
                 neuron = Circle(
-                    radius=units_config["neuron_radius"],
-                    color=units_config["color"],
+                    radius=neurons_config["neuron_radius"],
+                    color=neurons_config["color"],
                 )
                 neurons.add(neuron)
 
         neurons.arrange(
-            units_config["neurons_direction"],
-            buff=units_config["neurons_buff"],
+            neurons_config["neurons_direction"],
+            buff=neurons_config["neurons_buff"],
         )
 
         return neurons
